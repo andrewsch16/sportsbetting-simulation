@@ -14,3 +14,15 @@ more options coming soon including use for different sportsbooks and different l
 you can see the odds and calculate EV using this spreadsheet -- (credit to @AlexMonahan100 on twitter for making this!)
 
 https://docs.google.com/spreadsheets/d/1Ql7TGK7w0HmiloejMgtGM8tNBxLOr4Yz7ONI1LNNnE8/edit?usp=sharing
+
+the "payout model" simulates a prizepicks 5-flex play, which is as follows
+
+0/5 - 0% return 
+1/5 - 0% return 
+2/5 - 0% return 
+3/5 - 40% return 
+4/5 - 100% return 
+5/5 - 900% return 
+
+
+<b> USE "setamountsim" if using a set $ amount per bet. Use "percentagesim" if you want to bet a % of your bankroll per bet. </b>
