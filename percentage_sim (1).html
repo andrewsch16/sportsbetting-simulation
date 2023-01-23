@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <input placeholder="Starting Value" id="start_input" type="number">
+    <input placeholder="win %" id="win_input" step=0.1 type="number">
+	<br>
+	<label for="precent_bet">Bet a % of your total: </label>
+	<input type="checkbox" id="percent_bet" name="percent_bet" value="percent">
+	<input placeholder="Bet Size" id="bet_input" type="number">
+	<br>
+    <input placeholder="iterations" id="iterations_input" type="number">
+    <button id="start_button">Start Simulation</button>
+	<label for="average_check">Average across x runs:</label>
+    <input type="checkbox" id="average_check">
+    <div id="average" hidden>
+        <label for="average_runs"># of runs to average:</label>
+        <input type="number" id="average_runs">
+    </div>
+	
+	</details>
+    <div style="position: relative; height:80vh; width:90vw">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/stdlib-js/random-base-binomial@esm/index.mjs"></script>
+    <script type="module">
+        import binomial from 'https://cdn.jsdelivr.net/gh/stdlib-js/random-base-binomial@esm/index.mjs';
+        const canvas = document.getElementById("chart");
+        const start_input = document.getElementById("start_input");
+        const bet_input = document.getElementById("bet_input");
+        const win_input = document.getElementById("win_input");
+        const iterations_input = document.getElementById("iterations_input");
+        const start_button = document.getElementById("start_button");
+		const percent_bet = document.getElementById("percent_bet");
+        const average_check = document.getElementById("average_check");
+        const average_runs = document.getElementById("average_runs");
+        const average_div = document.getElementById("average");
+
+        let chart = undefined;
+
+        function step(val, win, bet, percent) {
+            let num = Math.floor(binomial(5, win));
+			if(percent) {
+				if (num < 3) {
+					return val - (val * bet);
+				} else if (num == 3) {
+					return val - (val * (bet * 0.6));
+				} else if (num == 4) {
+					return val + (val * bet);
+				} else {
+					return val + (val * (bet * 9));
+				}
+			} else {
+				if (num < 3) {
+					return val - bet;
+				} else if (num == 3) {
+					return val - (bet * 0.6);
+				} else if (num == 4) {
+					return val + bet;
+				} else {
+					return val + (bet * 9);
+				}
+			}
+        }
+
+        function run_sim(value, win, n, bet, percent, runs_to_average) {
+
+            let averages = [];
+            let point_radius = n > 500 ? 0 : 2;
+            let data_sets = [];
+
+            for(let run = 0; run < runs_to_average; run++) {
+                let num = value;
+                let data = {label: `Run #${run}`, data:[], pointRadius: point_radius};
+                for (let i = 0; i <= n; i++) {
+                    if(!averages[i]) {
+                        averages.push({x: i, y: num});
+                    } else {
+                        averages[i].y += num;
+                    }
+                    data.data.push({x: i, y: num});
+                    num = step(num, win, bet, percent);
+                }
+                data_sets.push(data);
+            }
+
+            if(runs_to_average > 1) {
+                for(let i = 0; i <= n; i++) {
+                    averages[i].y = averages[i].y / runs_to_average;
+                }
+
+                data_sets.push({
+                    label: 'Average',
+                    data: averages,
+                    pointRadius: point_radius,
+                    cubicInterpolationMode: "monotone",
+                    tension: 10,
+                    order: -100
+                });
+            }
+
+            if (chart != undefined) {
+                chart.destroy();
+            }
+
+
+            chart = new Chart(
+                canvas,
+                {
+                    type: 'line',
+                    data: {
+                        datasets: data_sets
+                    },
+                    options: {
+                        responsiveness: true,
+                        animation: false,
+                        parsing: false,
+                        plugins: {
+                            decimation: {
+                                enabled: true,
+                                algorithm: 'min-max'
+                            }
+                        },
+                        interaction: {
+                            mode: 'nearest',
+                            axis: 'x',
+                            intersect: false
+                        },
+                        scales: {
+                            x: {
+                                type: "linear",
+                                ticks: {
+                                    source: "auto",
+                                    maxRotation: 0,
+                                    autoSkip: true,
+                                }
+                            }
+                        }
+                    }
+                }
+            )
+        }
+
+        average_check.onchange = () => {
+            if (average_check.checked) {
+                average.hidden = false;
+            } else {
+                average.hidden = true;
+            }
+        }
+
+        start_button.onclick = () => {
+            let val = parseInt(start_input.value);
+            let win = parseFloat(win_input.value) / 100.0;
+            let bet = parseInt(bet_input.value);
+            let n = parseInt(iterations_input.value);
+			let percent = percent_bet.checked;
+            let runs_to_average = average_check.checked ? parseInt(average_runs.value) : 1;
+			if(percent) {
+				bet = parseFloat(bet_input.value) / 100.0;
+			}   
+            run_sim(val, win, n, bet, percent, runs_to_average);
+        };
+    </script>
+</body>
