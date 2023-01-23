@@ -1,9 +1,11 @@
 # sportsbetting-simulation
 A way to run a simulation for the expected profit from EV betting over time!
 
+<i> Feel free to reach out to me on discord with any questions/help - Vadable#5332 </i>
+
 Just input your starting amount, win rate, and amount of bets and see a simulation of how much $$ you would make!
 
-<b><i>All percentages need to be input as a value between 0-1. For example .56 as 56% </b></i>
+<b><i>All percentages need to be input as a value between 0-100. For example 56 as 56% </b></i>
 
 this is using binomial distribution and is simulating <b>using prizepicks on a 5-pick flex play. </b>
 
@@ -24,5 +26,6 @@ the "payout model" simulates a prizepicks 5-flex play, which is as follows
 4/5 - 100% return 
 5/5 - 900% return 
 
+<b> -Added feature to run an average of multiple instances at once and show an average of them all! </b>
 
-<b> USE "setamountsim" if using a set $ amount per bet. Use "percentagesim" if you want to bet a % of your bankroll per bet. </b>
+
