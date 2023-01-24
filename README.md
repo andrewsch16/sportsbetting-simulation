@@ -30,4 +30,7 @@ the "payout model" simulates a prizepicks 5-flex play, which is as follows
 
 <b> -Added feature to run an average of multiple instances at once and show an average of them all! </b>
 
+![image](https://user-images.githubusercontent.com/123127352/214314122-45334283-6ff3-457e-a770-5508cbebaca2.png)
+
+
 
