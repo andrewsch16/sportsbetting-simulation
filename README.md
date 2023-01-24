@@ -1,6 +1,8 @@
 # sportsbetting-simulation
 A way to run a simulation for the expected profit from EV betting over time!
 
+To run just click code > download zip > click on main.html and run in any browser!
+
 <i> Feel free to reach out to me on discord with any questions/help - Vadable#5332 </i>
 
 Just input your starting amount, win rate, and amount of bets and see a simulation of how much $$ you would make!
