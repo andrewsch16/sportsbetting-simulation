@@ -1,4 +1,4 @@
-# sportsbetting-simulation
+# sportsbetting-simulation v0.2
 A way to run a simulation for the expected profit from EV betting over time!
 
 To run just click code > download zip > click on main.html and run in any browser!
